@@ -1,92 +1,128 @@
+'use client'
+
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import Lenis from 'lenis'
+
+const width = 600
+const height = 400
+const placeholderImageUrl = `https://via.placeholder.com/${width}x${height}.png`
+
+function AnimatedImage() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["end end", "start start"]
+  });
+  const scaleTransform = useTransform(() => 1 - Math.abs(0.5 - scrollYProgress.get()))
+  return <motion.div
+    ref={ref}
+    initial={{ 
+      opacity: 0,
+    }}
+    whileInView={{
+      opacity: 1,
+    }}
+    transition={{ 
+      duration: 0.5,
+    }}
+    style={{
+      position: "relative",
+      // border: '1px solid red',
+      scaleX: scaleTransform,
+      scaleY: scaleTransform,
+      display: 'flex',
+      alignItems: 'center',
+    }}
+  >
+    <Image
+      src={placeholderImageUrl}
+      alt=""
+      width={width}
+      height={height}
+    />
+    <div style={{marginLeft: '16px'}}>
+      text<br/>
+      text<br/>
+      text<br/>
+      text<br/>
+    </div>
+  </motion.div>
+}
 
 export default function Home() {
+
+  useEffect( () => {
+    const lenis = new Lenis()
+    function raf(time: any) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
+  })
+
+  let imgs = []
+  for (let i = 0; i < 10; i++) {
+    imgs.push(<AnimatedImage key={i} />)
+  }
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        Hello Jason!
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        {imgs}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
+
+// import "./styles.css";
+// import { useRef } from "react";
+// import { motion, useScroll } from "framer-motion";
+
+// function Item() {
+//   const ref = useRef(null);
+//   const { scrollYProgress } = useScroll({
+//     target: ref,
+//     offset: ["end end", "start start"]
+//   });
+
+//   return (
+//     <section>
+//       <div ref={ref}>
+//         <figure className="progress">
+//           <svg id="progress" width="75" height="75" viewBox="0 0 100 100">
+//             <circle cx="50" cy="50" r="30" pathLength="1" className="bg" />
+//             <motion.circle
+//               cx="50"
+//               cy="50"
+//               r={Math.abs(15 - scrollYProgress.get())}
+//               pathLength="1"
+//               className="indicator"
+//               style={{ pathLength: scrollYProgress }}
+//             />
+//           </svg>
+//         </figure>
+//       </div>
+//     </section>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <>
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//       <Item />
+//     </>
+//   );
+// }
