@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from 'lenis'
 
 const width = 600
@@ -55,7 +55,7 @@ export default function Home() {
 
   useEffect( () => {
     const lenis = new Lenis()
-    function raf(time: any) {
+    function raf(time: number) {
       lenis.raf(time)
       requestAnimationFrame(raf)
     }
@@ -63,7 +63,7 @@ export default function Home() {
 
   })
 
-  let imgs = []
+  const imgs = []
   for (let i = 0; i < 10; i++) {
     imgs.push(<AnimatedImage key={i} />)
   }
