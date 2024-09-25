@@ -53,15 +53,14 @@ function AnimatedImage() {
 
 export default function Home() {
 
-  useEffect( () => {
-    const lenis = new Lenis()
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-    requestAnimationFrame(raf)
-
-  })
+  // useEffect(() => {
+  //   const lenis = new Lenis()
+  //   function raf(time: number) {
+  //     lenis.raf(time)
+  //     requestAnimationFrame(raf)
+  //   }
+  //   requestAnimationFrame(raf)
+  // })
 
   const imgs = []
   for (let i = 0; i < 10; i++) {
