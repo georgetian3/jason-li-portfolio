@@ -1,6 +1,92 @@
+// 'use client'
+
+// import { motion, useScroll, useTransform } from 'framer-motion';
+// import Image from 'next/image';
+// import { useEffect, useRef, useState } from 'react';
+// import Lenis from 'lenis'
+
+// const width = 600
+// const height = 400
+
+// function getPlaceholderImageUrl() {
+//   return `https://picsum.photos/seed/${Math.round(Math.random() * 100)}/${width}/${height}`
+// }
+
+// function AnimatedImage({src}: {src: string}) {
+//   const ref = useRef(null);
+//   const { scrollYProgress } = useScroll({
+//     target: ref,
+//     offset: ['end end', 'start start']
+//   });
+//   const [scale, setScale] = useState<number>(1)
+//   // const scaleTransform = useTransform(() => 1 - Math.abs(0.5 - scrollYProgress.get()))
+//   return <motion.div
+//     ref={ref}
+//     initial={{ 
+//       opacity: 0,
+//     }}
+//     whileInView={{
+//       opacity: 1,
+//     }}
+//     transition={{ 
+//       duration: 0.5,
+//     }}
+//     animate={{
+//       width: width * scale,
+//       height: height * scale,
+//     }}
+//     // style={{
+//     //   scaleX: scale,
+//     //   scaleY: scale,
+//     // }}
+//     onHoverStart={() => setScale(1.2)}
+//     onHoverEnd={() => setScale(1)}
+//     className="relative space-x-4 flex items-center border-2 border-red-600"
+//   >
+//     <Image
+//       src={src}
+//       alt=''
+//       fill
+//       objectFit='contain'
+//     />
+//     <div>
+//       text<br/>
+//       text<br/>
+//       text<br/>
+//       text<br/>
+//     </div>
+//   </motion.div>
+// }
+
+
+
+// export default function Home() {
+//   useEffect(() => {
+//     const lenis = new Lenis()
+//     function raf(time: number) {
+//       lenis.raf(time)
+//       requestAnimationFrame(raf)
+//     }
+//     requestAnimationFrame(raf)
+//   })
+//   const srcs = []
+//   const imgs = []
+//   for (let i = 0; i < 10; i++) {
+//     srcs.push(getPlaceholderImageUrl())
+//     imgs.push(<AnimatedImage key={i} src={srcs[srcs.length - 1]}/>)
+//   }
+//   return (
+//     <div className="flex justify-center">
+//       <div className="flex-col justify-center align-center space-y-16 border-2 border-green-600">
+//         {imgs}
+//       </div>
+//     </div>
+//   );
+// }
+
 'use client'
 
-import { AnimatePresence, motion, useScroll } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
@@ -12,127 +98,76 @@ function getPlaceholderImageUrl() {
   return `https://picsum.photos/seed/${Math.round(Math.random() * 100)}/${width}/${height}`;
 }
 
-function AnimatedImage(
-  { src, handleHoverStart, handleHoverEnd, handleClick }:
-  { src: string, handleHoverStart: Function, handleHoverEnd: Function, handleClick: Function }
-) {
-  // const ref = useRef(null);
-  // const { scrollYProgress } = useScroll({
-  //   target: ref,
-  //   offset: ['end end', 'start start'],
-  // });
+function AnimatedImage({ src }: { src: string }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['end end', 'start start'],
+  });
   const [isHovered, setIsHovered] = useState(false);
 
-  return <motion.div layout className="flex place-content-center ">
-    <AnimatePresence
+  return (
+    <motion.div
+      ref={ref}
+      initial={{
+        opacity: 0,
+      }}
+      whileInView={{
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.5,
+      }}
+      animate={{
+        width: isHovered ? width * 1.2 : width,
+        height: isHovered ? height * 1.2 : height,
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className={`relative mx-auto`}
     >
-      <motion.div
-        onHoverStart={() => {
-          handleHoverStart()
-          setIsHovered(true)
-        }}
-        onHoverEnd={() => {
-          handleHoverEnd()
-          setIsHovered(false)
-        }}
-        className='flex space-x-4'
-      >
-        <motion.div layout
-          initial={{
-            opacity: 0,
-          }}
-          whileInView={{
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.5,
-          }}
-          animate={{
-            width: isHovered ? width * 1 : width,
-            height: isHovered ? height * 1 : height,
-          }}
-          
-          onClick={() => {
-            console.log('handleclick')
-            handleClick()
-          }}
-          className="relative"
-        >
-          <Image
-            src={src}
-            alt=''
-            fill
-            className='z-0'
-            />
-        </motion.div>
-        {isHovered && <motion.div layout className={`flex flex-col justify-center`}
-          initial={{ opacity: 0, x: -300 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 300 }}
-        >
-          texasdfasdfasdfasfaft<br />
-          text<br />
-          text<br />
-          text<br />
-          text<br />
-        </motion.div>}
-      </motion.div>
-
-    </AnimatePresence>
-    
-  </motion.div>
+      <Image
+        src={src}
+        alt=''
+        fill
+        objectFit='contain'
+      />
+      <div className="absolute flex items-center justify-center">
+        text<br />
+        text<br />
+        text<br />
+        text<br />
+      </div>
+    </motion.div>
+  );
 }
 
 export default function Home() {
 
-  const [hovered, setHovered] = useState(-1)
-  const [clicked, setClicked] = useState(-1)
-  const [imgs, setImgs] = useState<JSX.Element[]>([])
-
-  // useEffect(() => {
-  //   const lenis = new Lenis();
-  //   function raf(time: number) {
-  //     lenis.raf(time);
-  //     requestAnimationFrame(raf);
-  //   }
-  //   requestAnimationFrame(raf);
-  // });
-
   useEffect(() => {
-    console.log('creating new imgs')
-    const newImgs = []
-    for (let i = 0; i < 20; i++) {
-      const url = getPlaceholderImageUrl()
-      newImgs.push(
-        <AnimatedImage 
-          key={i} 
-          src={url}
-          handleHoverStart={() => {
-            setHovered(i)
-          }}
-          handleHoverEnd={() => {
-            console.log('end hovered', hovered)
-            setHovered(-1)
-          }}
-          handleClick={() => {
-            console.log('before', i, clicked)
-            if (i == clicked) {
-              console.log('i == clicked')
-              setClicked(-1)
-            } else {
-              console.log('else')
-              setClicked(i)
-            }
-            console.log('after', i, clicked)
-          }}
-        />
-      )
+    const lenis = new Lenis();
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
-    setImgs(newImgs)
-  }, [])
+    requestAnimationFrame(raf);
+  }, []);
 
-  return <div className="flex-1 h-full space-y-16 overflow-y-auto">
-    {imgs}
-  </div>
-  
+  const srcs = [];
+  const imgs = [];
+  for (let i = 0; i < 10; i++) {
+    srcs.push(getPlaceholderImageUrl());
+    imgs.push(
+      <AnimatedImage 
+        key={i} 
+        src={srcs[srcs.length - 1]} 
+      />
+    );
+  }
+
+  return (
+    <div className="mx-auto space-y-16 pd m-64">
+      {imgs}
+    </div>
+  );
 }
