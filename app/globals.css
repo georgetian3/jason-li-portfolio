@@ -23,3 +23,7 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+.debug {
+  border: 1px solid red;
+}
