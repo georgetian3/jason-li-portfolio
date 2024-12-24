@@ -56,7 +56,7 @@ function AnimatedPanel({ src }: { src: string }) {
     whileInView={{ opacity: 1 }}
     transition={{ duration: 0.5 }}
     animate={{
-      width: isExpanded ? "100vw" : '1200px',
+      width: isExpanded ? "100vw" : width,
     }}
     onClick={() => setIsExpanded(true)}
     className={`flex justify-center align-middle p-4 ${isExpanded ? "bg-white" : ""}`}
@@ -159,9 +159,10 @@ export default function Home() {
     );
   }
 
+
   return <div className="my-64 flex justify-center">
     <div
-      className={`bg-black fixed h-screen w-[2000px] top-0 left-1/2 transform -translate-x-1/2 z--10`}
+      className={`bg-black fixed h-screen w-[1120px] top-0 left-1/2 transform -translate-x-1/2 z--10`}
     />
     <div className='flex flex-col items-center z-10'>
       {imgs}
