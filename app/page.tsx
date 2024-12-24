@@ -1,8 +1,9 @@
 'use client'
 
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { Minimize2 } from 'lucide-react';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const width = 800;
 const height = 600;
@@ -20,23 +21,30 @@ interface AnimatedImageProps {
 
 function AnimatedImage({ src, width, height, isExpanded }: AnimatedImageProps) {
   const [isHovered, setIsHovered] = useState(false);
-  return <motion.div
-    transition={{
-      duration: 0.5,
-    }}
-    animate={{
-      width: isHovered || isExpanded ? width * 1.2 : width,
-      height: isHovered || isExpanded ? height * 1.2 : height,
-    }}
-    className={`relative`}
-    onHoverStart={() => setIsHovered(true)}
-    onHoverEnd={() => setIsHovered(false)}
-  >
-    <Image
-      src={src}
-      alt=''
-      fill
-    />
+  return <motion.div className='p-4'>
+    <motion.div
+      transition={{ 
+        duration: 0.5,
+        ease: "easeInOut"
+      }}
+      animate={{
+        width: isHovered || isExpanded ? width * 1.2: width,
+        height: isHovered || isExpanded ? height * 1.2 : height,
+      }}
+      className={`relative`}
+      style={{
+        width: width,
+        height: height,
+      }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      >
+      <Image
+        src={src}
+        alt=''
+        fill
+      />
+    </motion.div>
   </motion.div>
 }
 
@@ -45,57 +53,95 @@ function AnimatedPanel({ src }: { src: string }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return <motion.div
-    initial={{
-      opacity: 0,
-    }}
-    whileInView={{
-      opacity: 1,
-    }}
-    transition={{
-      duration: 0.5,
-    }}
+    whileInView={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
     animate={{
-      width: isExpanded ? "100vw" : 'auto',
+      width: isExpanded ? "100vw" : '1200px',
     }}
-    onClick={() => {
-      setIsExpanded(true)
-      console.log('Animated panel expanded')
-    }}
-    className={`debug flex p-40 ${isExpanded ? '' : ''}`}
+    onClick={() => setIsExpanded(true)}
+    className={`flex justify-center align-middle p-4 ${isExpanded ? "bg-white" : ""}`}
   >
-    <AnimatedImage
-      src={src}
-      width={width}
-      height={height}
-      isExpanded={isExpanded}
-    />
-    {
-      isExpanded && <div
-        className='flex text-white'
-        hidden={true}
+    <div className={`flex items-center ${isExpanded ? "overflow-scroll" : ""}`}>
+      <AnimatedImage
+        src={src}
+        width={width}
+        height={height}
+        isExpanded={isExpanded}
+      />
+      {
+        isExpanded && <div className="flex">
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+          <div>This is a slightly longer sentence.</div>
+        </div>
+      }
+    </div>
+    {isExpanded && <div
+      className='relative top-0 right-0 ml-16'
+    >
+      <button
+        onClick={(event) => {event.stopPropagation(); setIsExpanded(false)}}
+        className='justify-end'
       >
-
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        test<br/>
-        <button
-          onClick={(event) => {
-            event.stopPropagation()
-            setIsExpanded(false)
-            console.log('expanded', isExpanded)
-          }}
-          className='justify-end m-16'
-        >
-          x
-        </button>
-      </div>
-    } 
+        <Minimize2/>
+      </button>
+    </div>}
   </motion.div>
 }
 
@@ -113,8 +159,11 @@ export default function Home() {
     );
   }
 
-  return <div className="my-64 flex">
-    <div className='space-y-16 bg-black inline-block m-auto'>
+  return <div className="my-64 flex justify-center">
+    <div
+      className={`bg-black fixed h-screen w-[2000px] top-0 left-1/2 transform -translate-x-1/2 z--10`}
+    />
+    <div className='flex flex-col items-center z-10'>
       {imgs}
     </div>
   </div>
