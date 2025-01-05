@@ -24,17 +24,17 @@ function AnimatedPanel({ src }: { src: string }) {
   let scrollRef = useRef<HTMLDivElement>(null)
 
   return <motion.div
-    className={`debug flex justify-center p-4}`}
+    className={`flex justify-center p-4 `}
+    initial={false}
+    transition={{ duration: 0.5 }}
+    animate={{
+      width: isExpanded ? "100vw" : `${isZoomed ? zoomedWidth : width}px`
+    }}
   >
     <motion.div
       ref={scrollRef}
       onClick={() => setIsExpanded(true)}
-      className={`flex items-center bg-white ${isExpanded ? "overflow-scroll gap-x-4" : "overflow-hidden"}`}
-      initial={false}
-      transition={{ duration: 0.5 }}
-      animate={{
-        width: isExpanded ? "100vw" : `${isZoomed ? zoomedWidth : width}px`
-      }}
+      className={`flex items-center bg-white ${isExpanded ? "gap-x-4 overflow-scroll " : "overflow-hidden"}`}
     >
       {/* Cover image */}
       <div className="relative">
@@ -70,9 +70,7 @@ function AnimatedPanel({ src }: { src: string }) {
       </div>
 
       {/* Expanded info */}
-      <motion.div
-        className={`flex`}
-      >
+      <motion.div className={`flex`}>
         <div>This is a slightly longer sentence.</div>
         <div>This is a slightly longer sentence.</div>
         <div>This is a slightly longer sentence.</div>
@@ -135,17 +133,16 @@ function AnimatedPanel({ src }: { src: string }) {
       </motion.div>
     </motion.div>
 
-
     {/* Minimize button */}
     {isExpanded && <div
-      className='relative top-0 right-0 ml-16'
+      className='relative top-0 right-0 ml-4'
     >
       <button
         onClick={(event) => {
           event.stopPropagation()
           console.log(scrollRef.current)
-          scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
-          // setIsExpanded(false)
+          scrollRef.current?.scrollTo(0, 0)
+          setIsExpanded(false)
         }}
         className='justify-end'
       >
@@ -170,11 +167,11 @@ export default function Home() {
     );
   }
 
-  const [expanded, setExpanded] = useState(false)
-
+  // cannot use due to tailwind dynamic class quirk, hardcoding below
+  const blackWidthClass = `w-[${width * zoomFactor * 1.1}px]`
   return <div className="my-64 flex justify-center">
     <div
-      className={`bg-black fixed h-screen w-[1120px] top-0 left-1/2 transform -translate-x-1/2 z--10`}
+      className={`bg-black fixed h-screen w-[792px] top-0 left-1/2 transform -translate-x-1/2 z--10`}
     />
     <div className='flex flex-col items-center z-10'>
       {imgs}
